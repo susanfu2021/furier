@@ -1,0 +1,72 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0e6d2; /* A soft, paper-like background */
+    color: #333;
+}
+
+#story-container {
+    width: 90%;
+    max-width: 600px;
+    height: 75vh;
+    border: 5px solid #6b4f4f; /* A darker border for a book feel */
+    border-radius: 10px;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.story-page {
+    width: 100%;
+    height: 100%;
+    display: none; /* Hide all pages by default */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.story-page.active-page {
+    display: flex; /* Only show the active page */
+}
+
+.story-page img {
+    max-width: 100%;
+    max-height: 50%;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    object-fit: contain; /* Ensures the image fits without distortion */
+}
+
+.story-page p {
+    font-size: 1.2em;
+    line-height: 1.6;
+}
+
+#navigation-buttons {
+    margin-top: 20px;
+}
+
+#navigation-buttons button {
+    font-size: 1em;
+    padding: 10px 20px;
+    margin: 0 10px;
+    cursor: pointer;
+    background-color: #a0522d; /* A button color that matches the theme */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+#navigation-buttons button:hover {
+    background-color: #8b4513; /* Darker color on hover */
+}
