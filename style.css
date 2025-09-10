@@ -27,46 +27,93 @@ body {
     height: 100%;
     display: none; /* Hide all pages by default */
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    padding: 16px;
-    text-align: center;
+    text-align: center; /* This centers everything by default */
+    height: 100%;
+    transition: opacity 0.5s ease-in-out;
+}
+
+/* This targets all pages that are not the first page */
+.story-page:not(#page-1) {
+    text-align: left;
     box-sizing: border-box;
 }
 
 .story-page.active-page {
-    display: flex; /* Only show the active page */
+    display: flex;
 }
 
 .story-page img {
     max-width: 100%;
-    max-height: 50%;
+    max-height: 65%;
     border-radius: 8px;
-    margin-bottom: 20px;
-    object-fit: contain; /* Ensures the image fits without distortion */
+    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 .story-page p {
     font-size: 1.2em;
     line-height: 1.6;
+    max-height: 35%;
+    margin-left: 10px;
+    margin-right: 10px;
+	
+}
+
+.story-page .title {
+    font-style: italic;
+    color: #666;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.story-page .author {
+    font-style: italic;
+    color: #666;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 #navigation-buttons {
     margin-top: 20px;
 }
 
+.button-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
 #navigation-buttons button {
-    font-size: 1em;
     padding: 10px 20px;
+    font-size: 1em;
     margin: 0 10px;
-    cursor: pointer;
-    background-color: #a0522d; /* A button color that matches the theme */
-    color: white;
     border: none;
     border-radius: 5px;
-    transition: background-color 0.3s ease;
+    cursor: pointer;
+    background-color: #007BFF;
+    color: white;
+    transition: background-color 0.3s;
 }
 
 #navigation-buttons button:hover {
-    background-color: #8b4513; /* Darker color on hover */
+    background-color: #0056b3;
+}
+
+#navigation-buttons button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+#first-page-btn {
+    display: none;
+}
+
+body.last-page #first-page-btn {
+    display: block;
+}
+
+body.last-page #next-btn {
+    display: none;
 }

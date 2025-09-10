@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const nextBtn = document.getElementById('next-btn');
     const prevBtn = document.getElementById('prev-btn');
     const speakBtn = document.getElementById('play-btn');
+    const firstPageBtn = document.getElementById('first-page-btn');
+    const body = document.body;
 
     let currentPageIndex = 0;
 
@@ -10,48 +12,45 @@ document.addEventListener('DOMContentLoaded', (event) => {
         window.speechSynthesis.cancel();
         
         const utterance = new SpeechSynthesisUtterance(text);
-        
         window.speechSynthesis.speak(utterance);
     }
 
     function showPage(index) {
+        if (index < 0 || index >= storyPages.length) {
+            return;
+        }
+
         window.speechSynthesis.cancel();
 
         storyPages.forEach(page => {
             page.classList.remove('active-page');
         });
-
         storyPages[index].classList.add('active-page');
+        
+        currentPageIndex = index;
         
         updateButtons();
     }
 
     function updateButtons() {
-        if (currentPageIndex === 0) {
-            prevBtn.disabled = true;
-        } else {
-            prevBtn.disabled = false;
-        }
+        prevBtn.disabled = currentPageIndex === 0;
 
+        // Hide 'Next' button and show 'First' button on the last page
         if (currentPageIndex === storyPages.length - 1) {
-            nextBtn.disabled = true;
+            nextBtn.style.display = 'none';
+            firstPageBtn.style.display = 'block';
         } else {
-            nextBtn.disabled = false;
+            nextBtn.style.display = 'block';
+            firstPageBtn.style.display = 'none';
         }
     }
 
     nextBtn.addEventListener('click', () => {
-        if (currentPageIndex < storyPages.length - 1) {
-            currentPageIndex++;
-            showPage(currentPageIndex);
-        }
+        showPage(currentPageIndex + 1);
     });
 
     prevBtn.addEventListener('click', () => {
-        if (currentPageIndex > 0) {
-            currentPageIndex--;
-            showPage(currentPageIndex);
-        }
+        showPage(currentPageIndex - 1);
     });
     
     speakBtn.addEventListener('click', () => {
@@ -62,6 +61,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
             const pageText = pTag.textContent;
             speakText(pageText);
         }
+    });
+
+    firstPageBtn.addEventListener('click', () => {
+        showPage(0);
     });
 
     showPage(currentPageIndex);
