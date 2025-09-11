@@ -7,12 +7,29 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const body = document.body;
 
     let currentPageIndex = 0;
+    
+    const speech = new SpeechSynthesisUtterance();
 
-    function speakText(text) {
+    function speakText() {
         window.speechSynthesis.cancel();
         
-        const utterance = new SpeechSynthesisUtterance(text);
-        window.speechSynthesis.speak(utterance);
+        const currentPage = storyPages[currentPageIndex];
+        
+        let textToRead = '';
+        if (currentPageIndex === 0) {
+            const titleElement = currentPage.querySelector('.title');
+            const authorElement = currentPage.querySelector('.author');
+            if (titleElement) textToRead += titleElement.textContent + '. ';
+            if (authorElement) textToRead += authorElement.textContent;
+        } else {
+            const pElement = currentPage.querySelector('p');
+            if (pElement) textToRead = pElement.textContent;
+        }
+
+        if (textToRead) {
+            speech.text = textToRead;
+            window.speechSynthesis.speak(speech);
+        }
     }
 
     function showPage(index) {
@@ -29,13 +46,27 @@ document.addEventListener('DOMContentLoaded', (event) => {
         
         currentPageIndex = index;
         
+        // Update page number logic to exclude cover and end pages
+        const pageNumberElement = storyPages[index].querySelector('.page-number');
+        if (pageNumberElement) {
+            // Check if the current page is the cover (index 0) or the end (last index)
+            if (currentPageIndex === 0 || currentPageIndex === storyPages.length - 1) {
+                pageNumberElement.textContent = ''; // Hide page number on these pages
+            } else {
+                // Calculate the true page number by subtracting the cover page
+                const truePageNumber = currentPageIndex;
+                const totalPages = storyPages.length - 2; // Subtract cover and end pages
+                pageNumberElement.textContent = `Page ${truePageNumber} of ${totalPages}`;
+            }
+        }
+
         updateButtons();
+        speakText();
     }
 
     function updateButtons() {
         prevBtn.disabled = currentPageIndex === 0;
 
-        // Hide 'Next' button and show 'First' button on the last page
         if (currentPageIndex === storyPages.length - 1) {
             nextBtn.style.display = 'none';
             firstPageBtn.style.display = 'block';
@@ -52,19 +83,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
     prevBtn.addEventListener('click', () => {
         showPage(currentPageIndex - 1);
     });
-    
-    speakBtn.addEventListener('click', () => {
-        const currentPage = storyPages[currentPageIndex];
-        const pTag = currentPage.querySelector('p');
-        
-        if (pTag) {
-            const pageText = pTag.textContent;
-            speakText(pageText);
-        }
-    });
 
     firstPageBtn.addEventListener('click', () => {
         showPage(0);
+        currentPageIndex = 0;
     });
 
     showPage(currentPageIndex);
